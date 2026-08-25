@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/env';
 import { fetchUpcomingEvents } from '@/features/graduation/api';
@@ -25,24 +26,33 @@ export default async function HomePage() {
       <AppHeader />
 
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-b from-[#FDE7EF] via-[#FCEFF3] to-white px-6 pb-16 pt-9">
-          <Petals />
+        <section className="relative overflow-hidden px-6 pb-20 pt-10">
+          <Image
+            src="/HOME%20BANNER.png"
+            alt=""
+            fill
+            priority
+            sizes="(max-width: 448px) 100vw, 448px"
+            className="object-cover object-right"
+          />
+          {/* 좌측 텍스트 가독성 확보용 오버레이 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent" />
 
-          <h2 className="relative text-[22px] font-bold leading-snug">
+          <h2 className="relative text-[22px] font-bold leading-snug drop-shadow-sm">
             졸업식, 꽃이 필요한 순간
             <br />
-            <span className="text-pink-500">근처 판매 장소를</span>
+            <span className="text-pink-600">근처 판매 장소를</span>
             <br />
             쉽게 찾아보세요!
           </h2>
-          <p className="relative mt-3 text-[13px] leading-relaxed text-gray-500">
+          <p className="relative mt-3 text-[13px] font-medium leading-relaxed text-gray-700">
             전국 졸업식 정보를 한눈에 확인하고
             <br />
             가장 가까운 꽃 판매 장소를 찾아보세요.
           </p>
         </section>
 
-        <div className="-mt-9 px-5">
+        <div className="relative z-10 -mt-9 px-5">
           <SchoolSearchBar />
         </div>
 
@@ -91,36 +101,6 @@ export default async function HomePage() {
 
       <BottomNav />
     </>
-  );
-}
-
-/** 히어로 배경의 벚꽃잎 장식. */
-function Petals() {
-  const petals = [
-    { left: '8%', top: '12%', size: 10, rotate: 20, opacity: 0.5 },
-    { left: '78%', top: '8%', size: 14, rotate: -30, opacity: 0.45 },
-    { left: '62%', top: '30%', size: 9, rotate: 60, opacity: 0.4 },
-    { left: '88%', top: '52%', size: 12, rotate: 10, opacity: 0.4 },
-    { left: '20%', top: '58%', size: 8, rotate: -15, opacity: 0.35 },
-  ];
-
-  return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-      {petals.map((p) => (
-        <span
-          key={`${p.left}-${p.top}`}
-          className="absolute block rounded-[50%_0_50%_0] bg-pink-300"
-          style={{
-            left: p.left,
-            top: p.top,
-            width: p.size,
-            height: p.size,
-            opacity: p.opacity,
-            transform: `rotate(${p.rotate}deg)`,
-          }}
-        />
-      ))}
-    </div>
   );
 }
 
