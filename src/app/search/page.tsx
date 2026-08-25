@@ -29,7 +29,7 @@ export default async function SearchPage({
         .or(`name.ilike.%${q}%,address.ilike.%${q}%`)
         .gte('graduation_events.graduation_date', today)
         .order('name')
-        .limit(50)
+        .limit(200)
         .returns<SearchRow[]>()
     : { data: [] as SearchRow[] };
 

@@ -6,7 +6,7 @@ import BottomNav from '@/components/layout/BottomNav';
 
 export default async function EventsPage() {
   const supabase = createClient();
-  const events = await fetchUpcomingEvents(supabase, 100).catch(() => []);
+  const events = await fetchUpcomingEvents(supabase, 300).catch(() => []);
 
   return (
     <>
