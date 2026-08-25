@@ -108,31 +108,31 @@ export default function FloristForm({ initial }: Props) {
       </Field>
 
       <Field label="매장 위치">
-        <div className="flex gap-2">
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && searchAddress()}
-            placeholder="도로명 주소 또는 동 이름"
-            className="w-full flex-1 rounded-xl border border-gray-300 px-4 py-3 text-base outline-none focus:border-pink-500"
-          />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && searchAddress()}
+          placeholder="예: 서울 강북구 오현로"
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none focus:border-pink-500"
+        />
+        <div className="mt-2 flex gap-2">
           <button
             type="button"
             onClick={searchAddress}
             disabled={busy}
-            className="shrink-0 rounded-xl bg-gray-900 px-4 text-sm font-medium text-white disabled:bg-gray-300"
+            className="flex-1 rounded-xl bg-gray-900 py-3 text-sm font-medium text-white disabled:bg-gray-300"
           >
-            검색
+            주소 검색
+          </button>
+          <button
+            type="button"
+            onClick={useCurrentLocation}
+            disabled={busy}
+            className="flex-1 rounded-xl border border-pink-200 py-3 text-sm font-medium text-pink-600 disabled:text-gray-300"
+          >
+            📍 현재 위치
           </button>
         </div>
-        <button
-          type="button"
-          onClick={useCurrentLocation}
-          disabled={busy}
-          className="mt-2 text-sm text-pink-600 disabled:text-gray-300"
-        >
-          📍 현재 위치 사용
-        </button>
       </Field>
 
       {results && results.length > 0 && (
@@ -173,6 +173,12 @@ export default function FloristForm({ initial }: Props) {
           className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none focus:border-pink-500"
         />
       </Field>
+
+      {!picked && (
+        <p className="text-xs text-gray-400">
+          주소를 검색해 목록에서 선택하면 저장할 수 있습니다.
+        </p>
+      )}
 
       <button
         type="button"

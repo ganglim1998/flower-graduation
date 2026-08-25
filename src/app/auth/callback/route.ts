@@ -1,20 +1,25 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
-/** 매직링크 코드를 세션으로 교환한 뒤, 매장 등록 여부에 따라 분기한다. */
+/** OAuth 코드를 세션으로 교환한 뒤, 매장 등록 여부에 따라 분기한다. */
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get('code');
 
+  const oauthError = searchParams.get('error_description') ?? searchParams.get('error');
+  if (oauthError) {
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(oauthError)}`);
+  }
+
+  const code = searchParams.get('code');
   if (!code) {
-    return NextResponse.redirect(`${origin}/login?error=invalid_link`);
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent('인증 코드가 없습니다.')}`);
   }
 
   const supabase = createClient();
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    return NextResponse.redirect(`${origin}/login?error=expired_link`);
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`);
   }
 
   const { data: florist } = await supabase.from('florists').select('id').maybeSingle();
