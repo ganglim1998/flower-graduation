@@ -20,8 +20,15 @@ Supabase 대시보드 > SQL Editor 에서 `supabase/migrations` 의 파일을 **
 그다음 `supabase/seed/seoul_schools.sql` 을 실행해 강남/서초 예시 학교 10곳과 졸업식 일정 7건을 넣는다.
 (좌표와 일정은 흐름 검증용 근사값이다. 실서비스 전 NEIS 학교기본정보 API나 실제 CSV로 교체할 것.)
 
-**인증 설정**: Authentication > Providers > Email 에서 "Confirm email" 을 켜고, magic link 를 사용한다.
-Authentication > URL Configuration 의 Redirect URLs 에 `http://localhost:3000/auth/callback` 을 추가한다.
+**인증 설정 (카카오 로그인)**
+
+1. 카카오 개발자 콘솔 > 꽃길 앱 > **카카오 로그인** > 활성화 설정 ON
+2. 같은 화면의 **Redirect URI** 에 `https://<프로젝트ref>.supabase.co/auth/v1/callback` 등록
+3. **보안** 탭에서 Client Secret 생성 후 활성화
+4. Supabase > Authentication > Providers > **Kakao** 활성화,
+   Client ID 에 REST API 키, Client Secret 에 위에서 만든 값 입력
+5. Supabase > Authentication > URL Configuration > Redirect URLs 에
+   `http://localhost:3000/auth/callback` 추가
 
 **관리자 지정**: 한 번 로그인한 뒤, SQL Editor 에서 아래를 실행하면 `/admin` 에 접근할 수 있다.
 
@@ -66,7 +73,7 @@ supabase/
 
 ## 화면 흐름
 
-랜딩 → 이메일 매직링크 로그인 → 매장 위치 등록(`/onboarding`) → 주변 학교(`/schools`) →
+랜딩 → 카카오 로그인 → 매장 위치 등록(`/onboarding`) → 주변 학교(`/schools`) →
 학교 상세(`/schools/[id]`) → 관심 학교(`/favorites`) / 내 매장(`/settings`)
 
 관리자는 `/admin` 에서 학교를 검색해 졸업식 일정을 추가·수정·삭제한다.

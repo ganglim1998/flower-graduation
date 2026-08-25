@@ -5,48 +5,22 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setStatus('sending');
+  async function signInWithKakao() {
+    setBusy(true);
     setError(null);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    const { error } = await createClient().auth.signInWithOAuth({
+      provider: 'kakao',
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
 
     if (error) {
-      setError('메일 발송에 실패했습니다. 주소를 확인하고 다시 시도해 주세요.');
-      setStatus('idle');
-      return;
+      setError('카카오 로그인을 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      setBusy(false);
     }
-    setStatus('sent');
-  }
-
-  if (status === 'sent') {
-    return (
-      <main className="flex flex-1 flex-col justify-center px-6 text-center">
-        <p className="text-4xl">📬</p>
-        <h1 className="mt-4 text-xl font-bold">메일을 확인해 주세요</h1>
-        <p className="mt-3 text-sm leading-relaxed text-gray-500">
-          <span className="font-medium text-gray-700">{email}</span> 로 로그인 링크를 보냈습니다.
-          <br />
-          링크를 누르면 바로 로그인됩니다.
-        </p>
-        <button
-          type="button"
-          onClick={() => setStatus('idle')}
-          className="mt-8 text-sm text-gray-400 underline"
-        >
-          다른 주소로 다시 보내기
-        </button>
-      </main>
-    );
   }
 
   return (
@@ -55,31 +29,32 @@ export default function LoginPage() {
         ← 뒤로
       </Link>
 
-      <h1 className="mt-8 text-2xl font-bold">이메일로 시작하기</h1>
-      <p className="mt-2 text-sm text-gray-500">
-        비밀번호 없이, 메일로 받은 링크만 누르면 됩니다.
-      </p>
+      <div className="flex flex-1 flex-col justify-center">
+        <h1 className="text-2xl font-bold">카카오로 시작하기</h1>
+        <p className="mt-2 text-sm leading-relaxed text-gray-500">
+          별도 회원가입 없이 카카오 계정으로 바로 이용할 수 있습니다.
+        </p>
 
-      <form onSubmit={handleSubmit} className="mt-8">
-        <input
-          type="email"
-          required
-          autoComplete="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="flower@example.com"
-          className="w-full rounded-xl border border-gray-300 px-4 py-3.5 text-base outline-none focus:border-pink-500"
-        />
-        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="mt-6 text-sm text-red-600">{error}</p>}
 
         <button
-          type="submit"
-          disabled={status === 'sending'}
-          className="mt-4 w-full rounded-xl bg-pink-600 py-4 text-base font-semibold text-white disabled:bg-gray-300"
+          type="button"
+          onClick={signInWithKakao}
+          disabled={busy}
+          className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-[#FEE500] py-4 text-base font-semibold text-[#191600] disabled:opacity-50"
         >
-          {status === 'sending' ? '보내는 중…' : '로그인 링크 받기'}
+          <KakaoIcon />
+          {busy ? '이동 중…' : '카카오 로그인'}
         </button>
-      </form>
+      </div>
     </main>
+  );
+}
+
+function KakaoIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+      <path d="M9 1.5C4.86 1.5 1.5 4.16 1.5 7.44c0 2.12 1.4 3.98 3.5 5.03l-.89 3.26c-.08.29.25.52.5.35l3.9-2.58c.16.01.32.02.49.02 4.14 0 7.5-2.66 7.5-5.94S13.14 1.5 9 1.5Z" />
+    </svg>
   );
 }
