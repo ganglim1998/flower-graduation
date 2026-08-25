@@ -17,7 +17,9 @@ Supabase 대시보드 > SQL Editor 에서 `supabase/migrations` 의 파일을 **
 | `0005_rpc_upsert_florist.sql` | 매장 저장·조회 RPC |
 | `0006_rpc_school_detail.sql` | 학교 상세·관심 학교 RPC |
 
-그다음 `supabase/seed/seoul_schools.sql` 을 실행해 강남/서초 예시 학교 10곳과 졸업식 일정 7건을 넣는다.
+그다음 시드를 실행한다.
+- `supabase/seed/seoul_schools.sql` — 강남/서초 예시 초·중·고 10곳, 졸업식 7건 (좌표는 근사값)
+- `supabase/seed/seoul_universities.sql` — 서울 소재 대학 55곳(캠퍼스 분리), 전기·후기 학위수여식 110건 (좌표는 카카오 API 실측)
 (좌표와 일정은 흐름 검증용 근사값이다. 실서비스 전 NEIS 학교기본정보 API나 실제 CSV로 교체할 것.)
 
 **인증 설정 (카카오 로그인)**
