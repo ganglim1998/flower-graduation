@@ -33,25 +33,32 @@ export default function SchoolsView({ florist }: { florist: MyFlorist }) {
 
   return (
     <>
-      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 pb-3 pt-4">
+      <div className="px-5 pt-4">
         <button
           type="button"
           onClick={() => router.push('/settings')}
-          className="flex w-full items-center gap-1.5 text-left"
+          className="flex w-full items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm active:bg-gray-50"
         >
-          <span className="text-sm">🌷</span>
-          <span className="truncate text-sm font-medium">{florist.name}</span>
-          <span className="truncate text-xs text-gray-400">{florist.address}</span>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-pink-50 text-base">
+            🌷
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-semibold">{florist.name}</span>
+            <span className="mt-0.5 block truncate text-xs text-gray-400">{florist.address}</span>
+          </span>
+          <span className="shrink-0 text-xs text-gray-300">변경 ›</span>
         </button>
+      </div>
 
-        <div className="mt-3 flex gap-1.5">
+      <header className="sticky top-0 z-10 space-y-2.5 bg-[#FDF6F7] px-5 pb-3 pt-3">
+        <div className="grid grid-cols-4 gap-1.5 rounded-2xl bg-white p-1.5 shadow-sm">
           {RADIUS_OPTIONS.map((m) => (
             <button
               key={m}
               type="button"
               onClick={() => setRadius(m)}
-              className={`flex-1 rounded-lg py-2 text-sm font-medium ${
-                radius === m ? 'bg-pink-600 text-white' : 'bg-gray-100 text-gray-500'
+              className={`rounded-xl py-2.5 text-sm font-semibold transition-colors ${
+                radius === m ? 'bg-pink-500 text-white' : 'text-gray-400 active:bg-gray-50'
               }`}
             >
               {m / 1000}km
@@ -59,27 +66,25 @@ export default function SchoolsView({ florist }: { florist: MyFlorist }) {
           ))}
         </div>
 
-        <div className="mt-3 flex items-center justify-between">
-          <div className="flex gap-3 text-sm">
-            <SortTab active={sort === 'distance'} onClick={() => setSort('distance')}>
-              거리순
-            </SortTab>
-            <SortTab active={sort === 'date'} onClick={() => setSort('date')}>
-              날짜 임박순
-            </SortTab>
-          </div>
+        <div className="flex items-center gap-2 rounded-2xl bg-white p-1.5 shadow-sm">
+          <SortTab active={sort === 'distance'} onClick={() => setSort('distance')}>
+            거리순
+          </SortTab>
+          <SortTab active={sort === 'date'} onClick={() => setSort('date')}>
+            날짜 임박순
+          </SortTab>
 
           <button
             type="button"
             onClick={() => setView(view === 'list' ? 'map' : 'list')}
-            className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+            className="ml-auto shrink-0 rounded-xl bg-gray-50 px-3.5 py-2 text-xs font-semibold text-gray-600 active:bg-gray-100"
           >
             {view === 'list' ? '🗺 지도' : '☰ 목록'}
           </button>
         </div>
       </header>
 
-      <div className="flex-1 px-4 py-4">
+      <div className="flex-1 px-5 pb-5">
         {schools.isPending && <p className="py-16 text-center text-sm text-gray-400">불러오는 중…</p>}
 
         {schools.isError && (
@@ -172,7 +177,9 @@ function SortTab({
     <button
       type="button"
       onClick={onClick}
-      className={active ? 'font-semibold text-gray-900' : 'text-gray-400'}
+      className={`rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors ${
+        active ? 'bg-pink-50 text-pink-600' : 'text-gray-400 active:bg-gray-50'
+      }`}
     >
       {children}
     </button>
