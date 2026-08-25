@@ -1,9 +1,9 @@
 'use client';
 
 import { Suspense, useState } from 'react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import Bouquet from '@/components/ui/Bouquet';
 
 export default function LoginPage() {
   return (
@@ -36,7 +36,14 @@ function LoginContent() {
   return (
     <main className="flex flex-1 flex-col justify-center px-7 py-12">
       <div className="flex justify-center">
-        <Bouquet className="h-44 w-44" />
+        <Image
+          src="/bouquet.png"
+          alt="꽃다발"
+          width={340}
+          height={333}
+          priority
+          className="h-48 w-auto"
+        />
       </div>
 
       <h1 className="mt-6 text-center text-2xl font-bold">졸업식 꽃 판매 지도</h1>
