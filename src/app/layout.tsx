@@ -3,7 +3,7 @@ import QueryProvider from '@/lib/query-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '졸업식 꽃 판매 지도',
+  title: '꽃길: 졸업식 꽃 판매 지도',
   description: '내 꽃집 주변 학교의 졸업식 일정을 거리순, 날짜순으로 확인하세요.',
 };
 

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function AppHeader({ title = '졸업식 꽃 판매 지도' }: { title?: string }) {
+export default function AppHeader({ title = '꽃길: 졸업식 꽃 판매 지도' }: { title?: string }) {
   return (
     <header className="sticky top-0 z-20 flex items-center gap-2 border-b border-gray-100 bg-white px-4 py-3.5">
       <GraduationCapIcon />

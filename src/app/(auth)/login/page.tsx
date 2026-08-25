@@ -46,7 +46,9 @@ function LoginContent() {
         />
       </div>
 
-      <h1 className="mt-6 text-center text-2xl font-bold">졸업식 꽃 판매 지도</h1>
+      <h1 className="mt-6 text-center text-[21px] font-bold tracking-tight">
+        꽃길: 졸업식 꽃 판매 지도
+      </h1>
       <p className="mt-2 text-center text-sm text-gray-500">
         로그인하고 더 많은 기능을 이용해보세요
       </p>
