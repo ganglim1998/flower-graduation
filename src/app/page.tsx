@@ -38,17 +38,16 @@ export default async function HomePage() {
           {/* 좌측 텍스트 가독성 확보용 오버레이 */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent" />
 
-          <h2 className="relative px-1 text-[22px] font-bold leading-snug drop-shadow-sm">
-            졸업식, 꽃이 필요한 순간
+          <h2 className="relative px-1 text-[22px] font-bold leading-snug break-keep drop-shadow-sm">
+            졸업식 대목,
             <br />
-            <span className="text-pink-600">근처 판매 장소를</span>
+            <span className="text-pink-600">우리 동네 학교 일정과</span>
             <br />
-            쉽게 찾아보세요!
+            위치를 한눈에!
           </h2>
-          <p className="relative mt-3 px-1 text-[13px] font-medium leading-relaxed text-gray-700">
-            전국 졸업식 정보를 한눈에 확인하고
-            <br />
-            가장 가까운 꽃 판매 장소를 찾아보세요.
+          <p className="relative mt-3 max-w-[280px] px-1 text-[13px] font-medium leading-relaxed break-keep text-gray-700">
+            전국 학교별 졸업식 날짜와 상세 위치를 확인하고, 다가오는 시즌 영업을 완벽하게 준비해
+            보세요.
           </p>
 
           <div className="relative mt-9">
