@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import KakaoMap from '@/components/map/KakaoMap';
+import NaverMap from '@/components/map/NaverMap';
 import SchoolCard from './SchoolCard';
 import { fetchNearbySchools } from './api';
 import { fetchFavoriteIds } from '@/features/favorite/api';
@@ -118,7 +118,7 @@ export default function SchoolsView({ florist }: { florist: MyFlorist }) {
             </p>
 
             {view === 'map' ? (
-              <KakaoMap
+              <NaverMap
                 center={{ lat: florist.lat, lng: florist.lng }}
                 radiusM={radius}
                 markers={sorted.map((s) => ({

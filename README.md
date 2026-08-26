@@ -49,15 +49,17 @@ select id from auth.users where email = 'your@email.com';
 npm run dev
 ```
 
-## 카카오 목업 모드
+## 지도와 주소 검색
 
-`NEXT_PUBLIC_KAKAO_JS_KEY` 가 없으면 지도가 좌표 기반 간이 뷰로, `KAKAO_REST_API_KEY` 가 없으면
-주소 검색이 `src/lib/kakao/mock-addresses.ts` 의 목 데이터로 동작한다. 키를 채우면 코드 수정 없이
-실제 카카오맵 SDK와 로컬 API로 전환된다.
+지도는 **네이버**, 주소 검색은 **카카오 로컬 API** 를 쓴다. 서로 독립적이라 한쪽 키만 있어도 동작한다.
 
-카카오 개발자 콘솔에서 필요한 것:
-- JavaScript 키 + 플랫폼 > Web 에 `http://localhost:3000` 도메인 등록 (등록하지 않으면 지도가 뜨지 않는다)
-- REST API 키 (서버에서만 사용, 클라이언트에 노출되지 않는다)
+| 키 | 없을 때 동작 | 발급처 |
+| --- | --- | --- |
+| `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` | 지도가 좌표 기반 간이 뷰로 표시됨 | NCP 콘솔 > Maps > Application |
+| `KAKAO_REST_API_KEY` | 주소 검색이 `src/lib/kakao/mock-addresses.ts` 목 데이터로 동작 | 카카오 개발자 콘솔 > 플랫폼 키 > REST API 키 |
+
+- 네이버는 Application 의 **Web 서비스 URL** 에 `http://localhost:3000` 을 등록해야 지도가 뜬다.
+- 카카오 REST 키는 서버(`/api/geocode`)에서만 사용되며 클라이언트에 노출되지 않는다.
 
 ## 구조
 
@@ -90,15 +92,15 @@ Project Settings > Environment Variables 에 4개를 등록한다 (Production/Pr
 | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | `https://<ref>.supabase.co` | |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon public 키 | 클라이언트 노출되는 값 |
-| `NEXT_PUBLIC_KAKAO_JS_KEY` | 카카오 JavaScript 키 | 클라이언트 노출되는 값 |
+| `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` | 네이버 지도 Client ID | 클라이언트 노출되는 값 |
 | `KAKAO_REST_API_KEY` | 카카오 REST API 키 | **서버 전용. NEXT_PUBLIC_ 접두어를 붙이지 말 것** |
 
 ### 2. 배포 후 도메인 등록
 
 배포 주소(`https://<프로젝트>.vercel.app`)를 세 곳에 추가한다. 하나라도 빠지면 지도나 로그인이 동작하지 않는다.
 
-- **카카오 개발자 콘솔 > 앱 > 플랫폼 키 > JavaScript 키 > JavaScript SDK 도메인**
-  → 배포 주소 추가 (지도 SDK 가 Referer 로 검사한다)
+- **NCP 콘솔 > Maps > Application > Web 서비스 URL**
+  → 배포 주소 추가 (등록하지 않으면 지도가 인증 오류로 뜨지 않는다)
 - **Supabase > Authentication > URL Configuration > Site URL**
   → 배포 주소로 변경
 - **Supabase > Authentication > URL Configuration > Redirect URLs**
@@ -110,4 +112,4 @@ Project Settings > Environment Variables 에 4개를 등록한다 (Production/Pr
 
 - 홈에서 졸업식 목록이 보이는지 (공개 읽기 RLS 필요)
 - 카카오 로그인 → 매장 등록 → 주변 학교 조회
-- 매장 등록 화면에서 지도에 핀이 뜨는지 (뜨지 않으면 JavaScript SDK 도메인 미등록)
+- 매장 등록 화면에서 지도에 핀이 뜨는지 (뜨지 않으면 네이버 Web 서비스 URL 미등록)
