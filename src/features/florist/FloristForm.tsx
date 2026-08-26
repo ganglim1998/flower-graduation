@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import NaverMap from '@/components/map/NaverMap';
+import KakaoMap from '@/components/map/KakaoMap';
 import { upsertFlorist, type MyFlorist } from './api';
 import type { AddressResult } from '@/types';
 
@@ -160,7 +160,7 @@ export default function FloristForm({ initial }: Props) {
       {picked && (
         <div>
           <p className="mb-2 text-sm font-medium">{picked.address}</p>
-          <NaverMap center={picked} className="h-48 w-full" />
+          <KakaoMap center={picked} className="h-48 w-full" />
         </div>
       )}
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { loadNaverMaps, isNaverMapEnabled } from '@/lib/naver/loader';
+import { loadKakaoMaps, isKakaoEnabled } from '@/lib/kakao/loader';
 import type { Coords } from '@/types';
 
 export type MapMarker = Coords & {
@@ -18,13 +18,7 @@ type Props = {
   className?: string;
 };
 
-/** 반경이 화면에 들어오도록 줌 레벨을 고른다. 네이버는 숫자가 클수록 확대된다. */
-function zoomForRadius(radiusM?: number) {
-  if (!radiusM) return 15;
-  return Math.min(16, Math.max(10, Math.round(15 - Math.log2(radiusM / 1000))));
-}
-
-export default function NaverMap({
+export default function KakaoMap({
   center,
   markers = [],
   radiusM,
@@ -34,31 +28,28 @@ export default function NaverMap({
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // 마커 배열은 렌더마다 새로 만들어지므로 내용으로 비교한다.
-  const markerKey = markers.map((m) => `${m.id}:${m.highlight ? 1 : 0}`).join(',');
-
   useEffect(() => {
-    if (!isNaverMapEnabled) return;
+    if (!isKakaoEnabled) return;
     let cancelled = false;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let map: any = null;
 
-    loadNaverMaps()
-      .then((naver) => {
-        if (!naver || cancelled || !containerRef.current) return;
+    loadKakaoMaps()
+      .then((kakao) => {
+        if (!kakao || cancelled || !containerRef.current) return;
 
-        const position = new naver.maps.LatLng(center.lat, center.lng);
-        map = new naver.maps.Map(containerRef.current, {
-          center: position,
-          zoom: zoomForRadius(radiusM),
+        const map = new kakao.maps.Map(containerRef.current, {
+          center: new kakao.maps.LatLng(center.lat, center.lng),
+          level: radiusM ? Math.max(3, Math.round(Math.log2(radiusM / 100)) + 1) : 4,
         });
 
-        new naver.maps.Marker({ map, position });
+        new kakao.maps.Marker({
+          map,
+          position: new kakao.maps.LatLng(center.lat, center.lng),
+        });
 
         if (radiusM) {
-          new naver.maps.Circle({
+          new kakao.maps.Circle({
             map,
-            center: position,
+            center: new kakao.maps.LatLng(center.lat, center.lng),
             radius: radiusM,
             strokeWeight: 1,
             strokeColor: '#db2777',
@@ -69,13 +60,13 @@ export default function NaverMap({
         }
 
         markers.forEach((m) => {
-          const marker = new naver.maps.Marker({
+          const marker = new kakao.maps.Marker({
             map,
-            position: new naver.maps.LatLng(m.lat, m.lng),
+            position: new kakao.maps.LatLng(m.lat, m.lng),
             title: m.label,
           });
           if (onMarkerClick) {
-            naver.maps.Event.addListener(marker, 'click', () => onMarkerClick(m.id));
+            kakao.maps.event.addListener(marker, 'click', () => onMarkerClick(m.id));
           }
         });
       })
@@ -83,12 +74,11 @@ export default function NaverMap({
 
     return () => {
       cancelled = true;
-      map?.destroy?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [center.lat, center.lng, radiusM, markerKey]);
+  }, [center.lat, center.lng, radiusM, markers]);
 
-  if (!isNaverMapEnabled || error) {
+  if (!isKakaoEnabled || error) {
     return (
       <FallbackMap
         center={center}
@@ -96,15 +86,15 @@ export default function NaverMap({
         radiusM={radiusM}
         onMarkerClick={onMarkerClick}
         className={className}
-        notice={error ?? '네이버 지도 키가 없어 간이 지도로 표시합니다.'}
+        notice={error ?? '카카오 지도 키가 없어 간이 지도로 표시합니다.'}
       />
     );
   }
 
-  return <div ref={containerRef} className={`${className} overflow-hidden rounded-xl bg-gray-100`} />;
+  return <div ref={containerRef} className={`${className} rounded-xl bg-gray-100`} />;
 }
 
-/** 지도 키가 없을 때 쓰는 좌표 기반 간이 뷰. */
+/** 카카오 키가 없을 때 쓰는 좌표 기반 간이 뷰. */
 function FallbackMap({
   center,
   markers,

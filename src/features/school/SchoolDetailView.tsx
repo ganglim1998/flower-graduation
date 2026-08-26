@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import NaverMap from '@/components/map/NaverMap';
+import KakaoMap from '@/components/map/KakaoMap';
 import FavoriteButton from '@/features/favorite/FavoriteButton';
 import { fetchSchoolDetail } from './api';
 import { fetchFavoriteIds } from '@/features/favorite/api';
@@ -72,7 +72,7 @@ export default function SchoolDetailView({
         </p>
 
         <div className="mt-5">
-          <NaverMap
+          <KakaoMap
             center={{ lat: s.lat, lng: s.lng }}
             markers={[{ id: s.id, lat: s.lat, lng: s.lng, label: s.name, highlight: true }]}
             className="h-44 w-full"
