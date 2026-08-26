@@ -28,7 +28,7 @@ export default async function HomePage() {
       <main className="flex-1">
         <section className="relative overflow-hidden px-5 pb-6 pt-11">
           <Image
-            src="/HOME%20BANNER.png"
+            src="/home-banner.png"
             alt=""
             fill
             priority

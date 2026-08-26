@@ -79,3 +79,35 @@ supabase/
 학교 상세(`/schools/[id]`) → 관심 학교(`/favorites`) / 내 매장(`/settings`)
 
 관리자는 `/admin` 에서 학교를 검색해 졸업식 일정을 추가·수정·삭제한다.
+
+## 배포 (Vercel)
+
+### 1. Vercel 환경변수
+
+Project Settings > Environment Variables 에 4개를 등록한다 (Production/Preview/Development 모두 체크).
+
+| 이름 | 값 | 비고 |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://<ref>.supabase.co` | |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon public 키 | 클라이언트 노출되는 값 |
+| `NEXT_PUBLIC_KAKAO_JS_KEY` | 카카오 JavaScript 키 | 클라이언트 노출되는 값 |
+| `KAKAO_REST_API_KEY` | 카카오 REST API 키 | **서버 전용. NEXT_PUBLIC_ 접두어를 붙이지 말 것** |
+
+### 2. 배포 후 도메인 등록
+
+배포 주소(`https://<프로젝트>.vercel.app`)를 세 곳에 추가한다. 하나라도 빠지면 지도나 로그인이 동작하지 않는다.
+
+- **카카오 개발자 콘솔 > 앱 > 플랫폼 키 > JavaScript 키 > JavaScript SDK 도메인**
+  → 배포 주소 추가 (지도 SDK 가 Referer 로 검사한다)
+- **Supabase > Authentication > URL Configuration > Site URL**
+  → 배포 주소로 변경
+- **Supabase > Authentication > URL Configuration > Redirect URLs**
+  → `https://<프로젝트>.vercel.app/auth/callback` 추가
+
+카카오 로그인의 Redirect URI 는 Supabase 콜백(`https://<ref>.supabase.co/auth/v1/callback`)이므로 배포해도 바뀌지 않는다.
+
+### 3. 확인
+
+- 홈에서 졸업식 목록이 보이는지 (공개 읽기 RLS 필요)
+- 카카오 로그인 → 매장 등록 → 주변 학교 조회
+- 매장 등록 화면에서 지도에 핀이 뜨는지 (뜨지 않으면 JavaScript SDK 도메인 미등록)
